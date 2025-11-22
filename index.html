@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JP Crunch Munch — Premium Snacks</title>
+  <meta name="description" content="JP Crunch Munch — Homemade Murukku, Mixtures, Laddoos, Malts & Masala Powders. Order via WhatsApp." />
+  <style>
+    /* ======================
+       Theme variables & reset
+       ====================== */
+    :root{
+      --bg: #fbf7f3;
+      --text: #222;
+      --muted: #6b6b6b;
+      --accent: #c26a2f;
+      --accent-2: #a14f20;
+      --glass: rgba(255,255,255,0.55);
+      --glass-border: rgba(255,255,255,0.28);
+      --card: #ffffffcc;
+      --radius: 14px;
+      --container: 1100px;
+      --gap: 14px;
+      --transition: 0.36s;
+      --fab: #25d366;
+      --wa-channel: "https://whatsapp.com/channel/0029Vb2GVo86WaKgwF7Mfu1X";
+      --shadow: 0 14px 40px rgba(6,6,6,0.08);
+    }
+    html,body{height:100%;margin:0}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* Dark theme */
+    body.dark{
+      --bg: #0f0f10;
+      --text: #eaeaea;
+      --muted: #bdbdbd;
+      --glass: rgba(30,30,30,0.62);
+      --glass-border: rgba(255,255,255,0.03);
+      --card: rgba(255,255,255,0.03);
+      --shadow: 0 18px 48px rgba(0,0,0,0.55);
+    }
+
+    .wrap{max-width:var(--container);margin:0 auto;padding:0 20px}
+
+    /* ======================
+       Header / Floating blurred navbar
+       ====================== */
+    header{
+      position:fixed; inset:0 0 auto 0; height:72px; display:flex; align-items:center; justify-content:space-between;
+      padding:12px 24px; z-index:120; border-bottom:1px solid rgba(0,0,0,0.04); backdrop-filter: blur(8px) saturate(1.05);
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+      transition: all var(--transition);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.03);
+      border-radius: 0 0 18px 18px;
+      margin: 8px;
+    }
+    body.dark header{
+      background: linear-gradient(180deg, rgba(20,20,20,0.78), rgba(20,20,20,0.55));
+      border-bottom-color: rgba(255,255,255,0.04);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--glass-border)}
+    .logo img{width:48px;height:48px;object-fit:contain}
+    nav a{margin-left:18px;text-decoration:none;color:inherit;font-weight:600;transition:color .25s}
+    nav a:hover{color:var(--accent-2)}
+    .controls{display:flex;align-items:center;gap:12px}
+
+    /* Dark toggle button: visible in both modes */
+    #darkToggle{
+      width:46px;height:46px;border-radius:10px;border:0;cursor:pointer;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7));
+      display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      transition: transform .18s, background .25s, color .25s;
+    }
+    body.dark #darkToggle{
+      background: linear-gradient(180deg, rgba(56,56,56,0.98), rgba(36,36,36,0.85));
+      color: #ffd;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.5);
+    }
+    #darkToggle:focus{outline:2px solid rgba(0,0,0,0.08); outline-offset:2px}
+
+    /* ======================
+       Hero
+       ====================== */
+    .hero{display:flex;gap:28px;align-items:center;padding:120px 0 40px;opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.2,.9,.3,1)}
+    .hero.visible{opacity:1;transform:none}
+    .hero .text{max-width:640px}
+    .hero h1{font-family:'Merriweather', serif;font-size:40px;margin:0;color:var(--accent-2)}
+    .lead{color:var(--muted);margin:12px 0 20px;font-size:17px}
+    .cta{background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;box-shadow: 0 8px 22px rgba(194,106,47,0.18)}
+
+    .hero img{width:420px;border-radius:18px;box-shadow:var(--shadow);transform:translateY(0);animation:float 3.8s ease-in-out infinite alternate}
+    @keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+
+    /* ======================
+       Animated counters (glass bar)
+       ====================== */
+    .counters {
+      display:flex;gap:12px;align-items:center;justify-content:center;margin:18px 0 6px;
+      flex-wrap:wrap;
+    }
+    .counter {
+      min-width:140px;padding:12px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-border);
+      backdrop-filter: blur(8px); text-align:center;box-shadow:0 8px 18px rgba(0,0,0,0.06);
+    }
+    .counter strong{display:block;font-size:20px;color:var(--accent-2)}
+    .counter span{display:block;color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* ======================
+       Product grid (glass-morphism cards)
+       ====================== */
+    .section-title{text-align:center;font-size:28px;color:var(--accent-2);margin:28px 0 8px}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:var(--gap);
+      padding:8px;
+    }
+    .card{
+      background: var(--glass);
+      border:1px solid var(--glass-border);
+      backdrop-filter: blur(10px) saturate(1.02);
+      border-radius: 12px;
+      padding:12px;
+      box-shadow: var(--shadow);
+      display:flex;flex-direction:column;transition:transform .35s, box-shadow .25s, border-color .25s;
+      overflow:hidden; position:relative;
+    }
+    .card:hover{ transform: translateY(-8px); box-shadow:0 20px 44px rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.06) }
+    .thumb{height:180px;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#f6f4f2,#eee); position:relative}
+    .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .45s,filter .35s}
+    .card:hover .thumb img{ transform:scale(1.03); filter:brightness(1.04) saturate(1.06) }
+    .thumb::before{ content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent, rgba(255,255,255,0.12), transparent); transform:skewX(-18deg) translateX(-120%); transition:transform .9s; pointer-events:none}
+    .card:hover .thumb::before{ transform:skewX(-18deg) translateX(120%) }
+    .card h4{ margin:10px 0 6px; font-size:16px; }
+    .meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .price{font-weight:800;color:var(--accent-2)}
+    .order-row{display:flex;gap:8px;align-items:center}
+    .btn-cta{background:var(--accent);color:#fff;border:0;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn-outline{background:transparent;border:2px solid rgba(255,255,255,0.12);color:inherit;padding:8px 10px;border-radius:10px;cursor:pointer}
+
+    /* ======================
+       Reviews carousel (fade) - not a slider
+       ====================== */
+    .reviews-wrap{position:relative;margin-top:8px}
+    .review-box{min-height:110px;padding:14px;border-radius:12px;background:var(--card);box-shadow:0 8px 22px rgba(0,0,0,0.06);color:var(--accent-2);transition:opacity .6s ease, transform .6s}
+    body.dark .review-box{ background: rgba(255,255,255,0.03); color:#eee }
+    .review-fade{position:relative;overflow:hidden}
+    .review-item{position:absolute;inset:0;opacity:0;padding:14px;display:flex;flex-direction:column;justify-content:center}
+    .review-item.active{opacity:1;position:relative}
+
+    /* ======================
+       Contact form
+       ====================== */
+    form.contact {
+      display:grid;gap:12px;padding:14px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+    }
+    form.contact input, form.contact textarea {
+      width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);font-size:14px;
+      background:transparent;color:inherit;resize:vertical;
+    }
+    form.contact button{width:max-content}
+
+    /* ======================
+       Sticky order bar
+       ====================== */
+    .order-bar{
+      position:fixed;left:12px;right:12px;bottom:18px;height:64px;border-radius:12px;padding:8px 12px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:700;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.86));
+      box-shadow:0 12px 40px rgba(0,0,0,0.08); border:1px solid rgba(0,0,0,0.04);
+      transition: transform .28s, opacity .28s;
+      backdrop-filter: blur(8px);
+    }
+    body.dark .order-bar{
+      background: linear-gradient(180deg, rgba(30,30,30,0.95), rgba(20,20,20,0.75));
+      border-color: rgba(255,255,255,0.04);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.6);
+    }
+    .order-bar .txt{font-weight:700}
+    .order-bar .mini{font-size:13px;color:var(--muted)}
+    .order-bar.hidden{ transform: translateY(110%); opacity:0; pointer-events:none; }
+
+    /* responsive */
+    @media (max-width:920px){
+      .hero{flex-direction:column;gap:18px;padding:96px 0 32px}
+      .hero img{width:100%;max-width:420px}
+      .wrap{padding:0 16px}
+      .two-col{grid-template-columns:1fr}
+      .counters{justify-content:stretch}
+    }
+    @media (max-width:480px){
+      .thumb{height:140px}
+      .logo img{width:40px;height:40px}
+      :root{ --gap:10px }
+      header{ margin:6px; padding:10px 14px }
+      .order-bar{left:10px;right:10px;bottom:12px;height:62px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="wrap" role="banner">
+    <div class="brand" aria-hidden="false">
+      <div class="logo"><img id="logoImg" src="/mnt/data/download.png" alt="JP Crunch Munch logo"></div>
+      <div style="font-weight:800">JP Crunch Munch</div>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <a href="#hero">Home</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="controls">
+      <button id="darkToggle" aria-pressed="false" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="wrap" style="padding-bottom:120px">
+    <section class="hero" id="hero" aria-label="hero">
+      <div class="text">
+        <h1>Traditional Snacks, Freshly Made.</h1>
+        <p class="lead">Handmade Murukku, Mixtures, Dry Fruit Laddoos, Malts & Masala Powders — family recipes, premium ingredients, no preservatives.</p>
+        <div style="display:flex;gap:12px;margin-top:10px">
+          <a class="cta" href="#products">Shop Bestsellers</a>
+          <button id="orderQuick" class="btn-outline">Order via WhatsApp</button>
+        </div>
+
+        <!-- Animated counters -->
+        <div class="counters" aria-hidden="false">
+          <div class="counter"><strong data-target="1200">0</strong><span>Orders Delivered</span></div>
+          <div class="counter"><strong data-target="250">0</strong><span>Products Sold</span></div>
+          <div class="counter"><strong data-target="5">0</strong><span>Years of Taste</span></div>
+        </div>
+      </div>
+
+      <img id="heroImg" src="/mnt/data/A_website_homepage_for_JP_Crunch_Munch,_an_Indian_.png" alt="Hero image">
+    </section>
+
+    <h2 class="section-title" id="products">Our Bestsellers</h2>
+
+    <!-- Products grid (glass cards) -->
+    <div class="grid" id="productGrid" aria-live="polite"></div>
+
+    <!-- About + Contact form -->
+    <section id="about" class="section">
+      <div class="two-col">
+        <div>
+          <h3>About JP Crunch Munch</h3>
+          <p>JP Crunch Munch is a homemade snack brand producing Murukku, Mixtures, Dry Fruit Laddoos, Malts, and Masala Powders using traditional recipes and premium ingredients. We pack festival-ready gift sets and accept custom orders.</p>
+
+          <h4 style="margin-top:18px">Contact & Orders</h4>
+          <form id="contactForm" class="contact" novalidate>
+            <input id="name" name="name" placeholder="Your name" required />
+            <input id="phone" name="phone" placeholder="Phone / WhatsApp number" required inputmode="tel" />
+            <textarea id="message" name="message" placeholder="Your message / order (e.g. 2 x Garlic Murukku)" rows="4" required></textarea>
+            <div style="display:flex;gap:10px;align-items:center">
+              <button type="submit" class="btn-cta">Send via WhatsApp</button>
+              <button type="button" id="contactReset" class="btn-outline">Reset</button>
+            </div>
+            <div id="formNote" style="font-size:13px;color:var(--muted);margin-top:8px">We'll open WhatsApp with a prefilled message so you can confirm before sending.</div>
+          </form>
+        </div>
+
+        <div>
+          <img src="/mnt/data/0d9d34b7-ae38-465d-ab1b-574b0ff622c0.png" alt="laddoo" style="width:100%;border-radius:10px;box-shadow:var(--shadow)">
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews (fade carousel) -->
+    <section id="reviews" class="section">
+      <h3>Customer Reviews</h3>
+      <div class="reviews-wrap">
+        <div class="review-fade" style="height:140px">
+          <div class="review-item active" aria-live="polite">
+            <div class="review-box"><strong>Ananya</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Best murukus I've had in a long time — crisp and full of flavour!"</div></div>
+          </div>
+          <div class="review-item">
+            <div class="review-box"><strong>Ravi</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Ordered for Diwali — the packaging and taste were top notch."</div></div>
+          </div>
+          <div class="review-item">
+            <div class="review-box"><strong>Priya</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Healthy laddoos — loved the texture and sweetness."</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Sticky order bar (always visible) -->
+  <div id="orderBar" class="order-bar" role="region" aria-label="Quick order">
+    <div>
+      <div class="txt">Order Now</div>
+      <div class="mini">Fresh, homemade — ready to ship</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button id="barOrderBtn" class="btn-cta">Order on WhatsApp</button>
+      <button id="barMenuBtn" class="btn-outline">View Menu</button>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp FAB (link to channel) -->
+  <a id="whatsappFab" class="fab" title="Open WhatsApp channel" href="https://whatsapp.com/channel/0029Vb2GVo86WaKgwF7Mfu1X" target="_blank" rel="noopener">💬</a>
+
+  <!-- Product detail modal -->
+  <div id="modal" class="modal" aria-hidden="true"><div id="modalCard" class="modal-card" role="dialog" aria-modal="true"></div></div>
+
+  <script>
+    /* ============================
+       Local images (from your uploads)
+       ============================ */
+    const PRODUCTS_IMAGE = '/mnt/data/A_packaging_photograph_features_a_stand-up_pouch_c.png';
+    const HERO_IMAGE = 'Copy of Jp Crunch & Munch.png';
+    const LOGO_IMAGE = 'download.png';
+    const WHATSAPP_CHANNEL = 'https://whatsapp.com/channel/0029Vb2GVo86WaKgwF7Mfu1X';
+    const WHATSAPP_NUMBER = '9379711644';
+
+    const products = [
+      { id:1, title:'Garlic Murukku — pouch', price:120, unit:'250g', img:PRODUCTS_IMAGE, desc:'Crispy garlic murukku.' },
+      { id:2, title:'Ribbon Murukku — pouch', price:110, unit:'250g', img:PRODUCTS_IMAGE, desc:'Crunchy ribbon murukku.' },
+      { id:3, title:'Special Mixture — pouch', price:140, unit:'300g', img:PRODUCTS_IMAGE, desc:'Savory namkeen mix.' },
+      { id:4, title:'Dry Fruit Laddoo — box', price:240, unit:'200g', img:PRODUCTS_IMAGE, desc:'Healthy dry fruit laddoo.' }
+    ];
+
+    /* ============================
+       Helpers
+       ============================ */
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+    function safeOpenWhatsApp(message){
+      try {
+        const encoded = encodeURIComponent(String(message));
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+        window.open(url, '_blank', 'noopener');
+      } catch (err) {
+        console.error('open whatsapp failed', err);
+        window.open(WHATSAPP_CHANNEL, '_blank', 'noopener');
+      }
+    }
+
+    /* ============================
+       Render product grid (no slider)
+       ============================ */
+    function renderGrid(){
+      const grid = $('#productGrid');
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const article = document.createElement('article');
+        article.className = 'card product-card';
+        article.innerHTML = `
+          <div class="thumb" aria-hidden="true"><img src="${p.img}" alt="${p.title}" loading="lazy"></div>
+          <h4>${p.title}</h4>
+          <div style="color:var(--muted);font-size:13px">${p.unit}</div>
+          <p style="color:var(--muted);margin-top:8px;font-size:13px">${p.desc}</p>
+          <div class="meta">
+            <div class="price">₹${p.price}</div>
+            <div class="order-row">
+              <button class="btn-outline details" data-id="${p.id}">Details</button>
+              <button class="btn-cta order" data-title="${encodeURIComponent(p.title)}">Order</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(article);
+      });
+
+      // attach listeners
+      $$('.order').forEach(b => b.addEventListener('click', e => {
+        const title = decodeURIComponent(e.currentTarget.dataset.title || '');
+        safeOpenWhatsApp(`Hi, I want to order: ${title}`);
+      }));
+      $$('.details').forEach(b => b.addEventListener('click', e => openDetails(Number(e.currentTarget.dataset.id))));
+    }
+
+    /* ============================
+       Modal detail
+       ============================ */
+    function openDetails(id){
+      const p = products.find(x => x.id === id);
+      if(!p) return;
+      const modal = $('#modal'); const card = $('#modalCard');
+      card.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+          <img src="${p.img}" alt="${p.title}" style="width:100%;border-radius:10px"/>
+          <div>
+            <h2 style="margin-top:0">${p.title}</h2>
+            <div style="color:var(--muted);margin-bottom:12px">${p.unit} • ₹${p.price}</div>
+            <p style="color:var(--muted)">${p.desc}</p>
+            <div style="margin-top:14px;display:flex;gap:10px">
+              <button id="modalOrder" class="btn-cta">Order on WhatsApp</button>
+              <button id="modalClose" class="btn-outline">Close</button>
+            </div>
+          </div>
+        </div>
+      `;
+      modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+      $('#modalClose')?.addEventListener('click', closeModal, { once:true });
+      $('#modalOrder')?.addEventListener('click', ()=> safeOpenWhatsApp(`I would like to order: ${p.title} (1)`), { once:true });
+    }
+    function closeModal(){ const m = $('#modal'); if(!m) return; m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }
+    $('#modal')?.addEventListener('click', e => { if(e.target.id === 'modal') closeModal(); });
+
+    /* ============================
+       Animated counters
+       ============================ */
+    function animateCounter(el, target, duration = 1200){
+      let start = 0;
+      const stepTime = Math.max(8, Math.floor(duration / target));
+      const timer = setInterval(() => {
+        start += Math.ceil(target / (duration / stepTime));
+        if (start >= target) {
+          el.textContent = target.toString();
+          clearInterval(timer);
+        } else el.textContent = start.toString();
+      }, stepTime);
+    }
+    function setupCounters(){
+      const counters = $$('[data-target]');
+      counters.forEach(c => c.textContent = '0');
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(en => {
+          if(en.isIntersecting){
+            const target = Number(en.target.getAttribute('data-target') || '0');
+            animateCounter(en.target, target, 1400);
+            o.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.25 });
+      counters.forEach(c => obs.observe(c));
+    }
+
+    /* ============================
+       Reviews fade carousel (no slider)
+       ============================ */
+    function startReviewsCarousel(){
+      const items = $$('.review-item');
+      if(!items.length) return;
+      let i = 0;
+      items.forEach(it => { it.classList.remove('active'); it.style.opacity = 0; });
+      items[0].classList.add('active'); items[0].style.opacity = 1;
+      setInterval(() => {
+        items[i].classList.remove('active'); items[i].style.opacity = 0;
+        i = (i + 1) % items.length;
+        items[i].classList.add('active'); items[i].style.opacity = 1;
+      }, 3800);
+    }
+
+    /* ============================
+       Scroll reveal
+       ============================ */
+    function setupReveal(){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if(en.isIntersecting){
+            en.target.classList.add('visible');
+            obs.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      const hero = $('#hero'); if(hero) obs.observe(hero);
+      $$('.product-card').forEach(c => obs.observe(c));
+      $$('.review-box').forEach(r => obs.observe(r));
+    }
+
+    /* ============================
+       Contact form -> open whatsapp with message
+       ============================ */
+    function setupContactForm(){
+      const form = $('#contactForm');
+      if(!form) return;
+      const name = $('#name'); const phone = $('#phone'); const message = $('#message'); const reset = $('#contactReset');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(!name.value.trim() || !phone.value.trim() || !message.value.trim()){
+          alert('Please fill name, phone and message before sending.');
+          return;
+        }
+        const text = `Order/Message from ${name.value.trim()} (${phone.value.trim()}): ${message.value.trim()}`;
+        safeOpenWhatsApp(text);
+      });
+      reset.addEventListener('click', () => { form.reset(); });
+    }
+
+    /* ============================
+       Sticky order bar behavior
+       ============================ */
+    function setupOrderBar(){
+      const bar = $('#orderBar');
+      const barBtn = $('#barOrderBtn'); const menuBtn = $('#barMenuBtn');
+      barBtn?.addEventListener('click', () => safeOpenWhatsApp('Hi — I want to place an order'));
+      menuBtn?.addEventListener('click', () => {
+        const el = document.getElementById('products');
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+
+      // hide on top, show on down (small UX)
+      let lastY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const cur = window.scrollY;
+        if(cur < 120) bar.classList.add('hidden');
+        else bar.classList.remove('hidden');
+        lastY = cur;
+      });
+      // initial state
+      if(window.scrollY < 120) bar.classList.add('hidden');
+    }
+
+    /* ============================
+       Dark mode toggle (persist visible)
+       ============================ */
+    function setupDarkToggle(){
+      const toggle = $('#darkToggle');
+      if(!toggle) return;
+      toggle.addEventListener('click', () => {
+        const now = document.body.classList.toggle('dark');
+        toggle.setAttribute('aria-pressed', String(now));
+        toggle.textContent = now ? '☀️' : '🌙';
+        try { localStorage.setItem('jp_dark', now ? 'true' : 'false'); } catch(e){}
+      });
+      // initial state from storage or system
+      try {
+        const saved = localStorage.getItem('jp_dark');
+        if(saved === 'true') {
+          document.body.classList.add('dark');
+          toggle.textContent = '☀️';
+          toggle.setAttribute('aria-pressed','true');
+        } else if(saved === 'false') {
+          document.body.classList.remove('dark');
+          toggle.textContent = '🌙';
+          toggle.setAttribute('aria-pressed','false');
+        }
+      } catch(e){}
+    }
+
+    /* ============================
+       Init everything on DOMContentLoaded
+       ============================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      // set hero & logo images defensively
+      const heroImg = $('#heroImg'); if(heroImg) heroImg.src = HERO_IMAGE;
+      const logoImg = $('#logoImg'); if(logoImg) logoImg.src = LOGO_IMAGE;
+
+      renderGrid();
+      setupCounters();
+      setupContactForm();
+      setupOrderBar();
+      setupDarkToggle();
+      startReviewsCarousel();
+
+      // reveal for visible elements (stagger cards)
+      $$('.product-card').forEach((c, i) => setTimeout(()=> c.classList.add('visible'), i * 60));
+      // small delay then setup intersection reveal (for hero & remaining)
+      setTimeout(setupReveal, 120);
+
+      // keyboard escape closes modal
+      document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+    });
+  </script>
+</body>
+</html>
