@@ -165,41 +165,43 @@
     /* =======================
    Auto-scroll Review Carousel
    ======================= */
-.review-carousel-wrapper {
+.review-carousel {
+  width: 100%;
   overflow: hidden;
   position: relative;
-  width: 100%;
-  margin-top: 20px;
+  padding: 40px 0;
 }
 
-.review-carousel {
+.review-track {
   display: flex;
-  gap: 16px;
-  animation: scrollReviews 22s linear infinite;
-}
-
-.review-carousel:hover {
-  animation-play-state: paused; /* pause on hover */
+  gap: 20px;
+  transition: transform 0.6s ease;
 }
 
 .review-card {
-  min-width: 260px;
-  background: var(--card);
-  border-radius: 12px;
-  padding: 16px;
-  flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  transition: transform .3s;
+  min-width: 280px;
+  max-width: 280px;
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  animation: fadeIn 0.8s ease;
 }
 
-.review-card:hover {
-  transform: translateY(-6px);
+.review-card h4 {
+  margin-top: 15px;
+  font-weight: 600;
+  opacity: 0.8;
 }
 
-@keyframes scrollReviews {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
 
 
     /* ======================
@@ -367,42 +369,35 @@
     <div class="review-carousel-wrapper">
   <div class="review-carousel">
     
-    <div class="review-card">
-      <strong>Ananya</strong>
-      <div class="stars" data-rating="5"></div>
-      <p class="muted">"Best murukus I've had in a long time — crisp and full of flavour!"</p>
-    </div>
+    <section id="reviews" class="py-16">
+  <h2 class="section-title">Customer Reviews</h2>
 
-    <div class="review-card">
-      <strong>Ravi</strong>
-      <div class="stars" data-rating="5"></div>
-      <p class="muted">"Ordered for Diwali — the packaging and taste were top notch."</p>
-    </div>
+  <div class="review-carousel">
+    <div class="review-track">
 
-    <div class="review-card">
-      <strong>Priya</strong>
-      <div class="stars" data-rating="4"></div>
-      <p class="muted">"Healthy laddoos — loved the texture and sweetness."</p>
-    </div>
+      <div class="review-card">
+        <p>"Garlic Murukku is insanely crunchy and flavour-packed!"</p>
+        <h4>- Keerthana</h4>
+      </div>
 
-    <!-- Duplicate for infinite loop -->
-    <div class="review-card">
-      <strong>Ananya</strong>
-      <div class="stars" data-rating="5"></div>
-      <p class="muted">"Best murukus I've had in a long time — crisp and full of flavour!"</p>
-    </div>
+      <div class="review-card">
+        <p>"Ribbon Murukku tastes just like homemade – loved it."</p>
+        <h4>- Rajesh</h4>
+      </div>
 
-    <div class="review-card">
-      <strong>Ravi</strong>
-      <div class="stars" data-rating="5"></div>
-      <p class="muted">"Ordered for Diwali — the packaging and taste were top notch."</p>
-    </div>
+      <div class="review-card">
+        <p>"Special Mixture is perfectly spiced. A must-try!"</p>
+        <h4>- Sunil</h4>
+      </div>
 
-    <div class="review-card">
-      <strong>Priya</strong>
-      <div class="stars" data-rating="4"></div>
-      <p class="muted">"Healthy laddoos — loved the texture and sweetness."</p>
+      <div class="review-card">
+        <p>"Dry Fruit Laddoo feels premium and fresh."</p>
+        <h4>- Fatima</h4>
+      </div>
+
     </div>
+  </div>
+</section>
 
   </div>
 </div>
@@ -462,6 +457,24 @@
         window.open(WHATSAPP_CHANNEL, '_blank', 'noopener');
       }
     }
+
+    let reviewIndex = 0;
+const track = document.querySelector(".review-track");
+const cards = document.querySelectorAll(".review-card");
+
+function autoScrollReviews() {
+  reviewIndex++;
+
+  if (reviewIndex >= cards.length) {
+    reviewIndex = 0;
+  }
+
+  const offset = reviewIndex * (cards[0].offsetWidth + 20);
+  track.style.transform = `translateX(-${offset}px)`;
+}
+
+setInterval(autoScrollReviews, 2500);
+
 
     /* ============================
        Render product grid (no slider)
