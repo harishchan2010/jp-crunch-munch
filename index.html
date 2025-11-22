@@ -162,6 +162,46 @@
     .review-item{position:absolute;inset:0;opacity:0;padding:14px;display:flex;flex-direction:column;justify-content:center}
     .review-item.active{opacity:1;position:relative}
 
+    /* =======================
+   Auto-scroll Review Carousel
+   ======================= */
+.review-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.review-carousel {
+  display: flex;
+  gap: 16px;
+  animation: scrollReviews 22s linear infinite;
+}
+
+.review-carousel:hover {
+  animation-play-state: paused; /* pause on hover */
+}
+
+.review-card {
+  min-width: 260px;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform .3s;
+}
+
+.review-card:hover {
+  transform: translateY(-6px);
+}
+
+@keyframes scrollReviews {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
     /* ======================
        Contact form
        ====================== */
@@ -324,24 +364,51 @@
         </div>
       </div>
     </section>
+    <div class="review-carousel-wrapper">
+  <div class="review-carousel">
+    
+    <div class="review-card">
+      <strong>Ananya</strong>
+      <div class="stars" data-rating="5"></div>
+      <p class="muted">"Best murukus I've had in a long time — crisp and full of flavour!"</p>
+    </div>
+
+    <div class="review-card">
+      <strong>Ravi</strong>
+      <div class="stars" data-rating="5"></div>
+      <p class="muted">"Ordered for Diwali — the packaging and taste were top notch."</p>
+    </div>
+
+    <div class="review-card">
+      <strong>Priya</strong>
+      <div class="stars" data-rating="4"></div>
+      <p class="muted">"Healthy laddoos — loved the texture and sweetness."</p>
+    </div>
+
+    <!-- Duplicate for infinite loop -->
+    <div class="review-card">
+      <strong>Ananya</strong>
+      <div class="stars" data-rating="5"></div>
+      <p class="muted">"Best murukus I've had in a long time — crisp and full of flavour!"</p>
+    </div>
+
+    <div class="review-card">
+      <strong>Ravi</strong>
+      <div class="stars" data-rating="5"></div>
+      <p class="muted">"Ordered for Diwali — the packaging and taste were top notch."</p>
+    </div>
+
+    <div class="review-card">
+      <strong>Priya</strong>
+      <div class="stars" data-rating="4"></div>
+      <p class="muted">"Healthy laddoos — loved the texture and sweetness."</p>
+    </div>
+
+  </div>
+</div>
 
     <!-- Reviews (fade carousel) -->
-    <section id="reviews" class="section">
-      <h3>Customer Reviews</h3>
-      <div class="reviews-wrap">
-        <div class="review-fade" style="height:140px">
-          <div class="review-item active" aria-live="polite">
-            <div class="review-box"><strong>Ananya</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Best murukus I've had in a long time — crisp and full of flavour!"</div></div>
-          </div>
-          <div class="review-item">
-            <div class="review-box"><strong>Ravi</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Ordered for Diwali — the packaging and taste were top notch."</div></div>
-          </div>
-          <div class="review-item">
-            <div class="review-box"><strong>Priya</strong><div style="margin-top:8px;color:var(--muted);font-size:14px">"Healthy laddoos — loved the texture and sweetness."</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+   
   </main>
 
   <!-- Sticky order bar (always visible) -->
